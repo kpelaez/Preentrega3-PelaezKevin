@@ -54,25 +54,6 @@ function calcularTotal(){
     return total;
 }
 
-/*Funcion para presupuesto final--> Se muestra por console.log*/
-//En esta funcion podemos generar el presupuesto en el dom con div y P's.
-// function mostrarPresupuestoFinal (total){
-
-//     let elemento = sessionStorage.getItem('presupuesto');
-//     elemento = JSON.parse(elemento);
-
-
-//     let nro_cliente = sessionStorage.getItem('nro_cliente');
-//     console.log('Presupuesto nº Cliente: '+nro_cliente);
-
-//     for (const item of elemento){
-
-//         console.log(item.producto+", cantidad: "+item.cantidad +", importe: $" +item.importe);
-//     }
-
-//     console.log("El Total del presupuesto es: $"+total);
-// }
-
 function mostrarPresupuestoFinal (total){
 
     let elemento = sessionStorage.getItem('presupuesto');
@@ -85,17 +66,22 @@ function mostrarPresupuestoFinal (total){
     let cuerpo = "";
     for (const item of elemento){
         
-        cuerpo +=`${item.producto}, cantidad: ${item.cantidad}, importe: $ ${item.importe}<br>`;
+        if (item.cantidad > 0) {            
+                cuerpo +=`${item.producto}, cantidad: ${item.cantidad}, importe: $ ${item.importe}<br>`;
+        }
+
     }   
 
     let stringTotal = `El total del presupuesto es: $${total}`;
 
     let contenedor_presupuesto = document.createElement("div");
+    contenedor_presupuesto.id = "presupuesto_carrito";
 
     //Estructura del div final
     contenedor_presupuesto.innerHTML = `<h3> ${inicioPresu}</h3>
                                         <p>${cuerpo}</p>
-                                        <p><strong>${stringTotal}</strong></p>`;
+                                        <p><strong>${stringTotal}</strong></p>                                        
+                                        <button class="btn btn-danger" type="button" onclick="volver_carrito();">Volver</button>`;
 
     document.body.appendChild(contenedor_presupuesto);
 }
@@ -150,5 +136,25 @@ const armar_presupuesto = () => {
 
     importeTotal = calcularTotal();
     mostrarPresupuestoFinal(importeTotal);
+
+    // Oculto el Carrito
+    document.getElementById("carrito").hidden = true;
+
+}
+
+// Borra el Presupuesto y vuelve a la vista del Carrito
+const volver_carrito = () => {
+
+    // Obtengo el Presupuesto Creado
+    let presupuesto_carrito = document.getElementById("presupuesto_carrito");
+
+    // Verifico que exista
+    if (presupuesto_carrito) {
+        // Si existe lo elimino
+        presupuesto_carrito.parentNode.removeChild(presupuesto_carrito);
+    }
+
+    // Muestro el Carrito
+    document.getElementById("carrito").hidden = false;
 
 }
