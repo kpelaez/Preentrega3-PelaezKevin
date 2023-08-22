@@ -11,14 +11,22 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('art_9_precio').innerHTML = '$'+bebidas[8].precio;
     document.getElementById('art_10_precio').innerHTML = '$'+bebidas[9].precio;
 
-    alert("BIENVENIDO!!")
-    alert("Vamos a generar un presupuesto de bebidas para su fiesta\n");
-    let nro_cliente = parseInt(prompt("¿Cuál es su número de Cliente?"));
-    sessionStorage.setItem('nro_cliente', nro_cliente);
-
+    
 });
 
-/*Obejto bebida */
+//Conseguir Nro de cliente del input y modificar header
+let nro_cliente = document.getElementById("nro_cliente");
+
+nro_cliente.onchange= () => {
+    
+    sessionStorage.setItem('nro_cliente', nro_cliente.value);
+    let contenedor = document.getElementById("datos_cliente");
+    
+    contenedor.innerHTML = `<h3>Su numero de cliente es: <strong>${sessionStorage.getItem('nro_cliente')}</strong> </h3>`;
+}
+
+
+/*Objeto bebida */
 function Bebida(nombre, precio){
     this.nombre = nombre;
     this.precio = precio;
@@ -47,23 +55,51 @@ function calcularTotal(){
 }
 
 /*Funcion para presupuesto final--> Se muestra por console.log*/
+//En esta funcion podemos generar el presupuesto en el dom con div y P's.
+// function mostrarPresupuestoFinal (total){
+
+//     let elemento = sessionStorage.getItem('presupuesto');
+//     elemento = JSON.parse(elemento);
+
+
+//     let nro_cliente = sessionStorage.getItem('nro_cliente');
+//     console.log('Presupuesto nº Cliente: '+nro_cliente);
+
+//     for (const item of elemento){
+
+//         console.log(item.producto+", cantidad: "+item.cantidad +", importe: $" +item.importe);
+//     }
+
+//     console.log("El Total del presupuesto es: $"+total);
+// }
+
 function mostrarPresupuestoFinal (total){
 
     let elemento = sessionStorage.getItem('presupuesto');
     elemento = JSON.parse(elemento);
-
-
+    
     let nro_cliente = sessionStorage.getItem('nro_cliente');
-    console.log('Presupuesto nº Cliente: '+nro_cliente);
-
+    //STRINGS CON PLANTILLAS
+    let inicioPresu = `Presupuesto del Cliente n°: ${nro_cliente}\n`;
+    
+    let cuerpo = "";
     for (const item of elemento){
+        
+        cuerpo +=`${item.producto}, cantidad: ${item.cantidad}, importe: $ ${item.importe}<br>`;
+        console.log(cuerpo); 
+    }   
 
-        console.log(item.producto+", cantidad: "+item.cantidad +", importe: $" +item.importe);
-    }
+    let stringTotal = `El total del presupuesto es: $${total}`;
 
-    console.log("El Total del presupuesto es: $"+total);
+    let contenedor_presupuesto = document.createElement("div");
+
+    //Estructura del div final
+    contenedor_presupuesto.innerHTML = `<h3> ${inicioPresu}</h3>
+                                        <p>${cuerpo}</p>
+                                        <p><strong>${stringTotal}</strong></p>`;
+
+    document.body.appendChild(contenedor_presupuesto);
 }
-
 
 /*Array Generico de bebidas*/
 const bebidas = [
