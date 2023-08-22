@@ -86,7 +86,6 @@ function mostrarPresupuestoFinal (total){
     for (const item of elemento){
         
         cuerpo +=`${item.producto}, cantidad: ${item.cantidad}, importe: $ ${item.importe}<br>`;
-        console.log(cuerpo); 
     }   
 
     let stringTotal = `El total del presupuesto es: $${total}`;
